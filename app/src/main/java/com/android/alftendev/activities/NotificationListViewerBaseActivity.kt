@@ -185,7 +185,7 @@ abstract class NotificationListViewerBaseActivity : AppCompatActivity(),
             }
         })
 
-        MyApplication.executor.execute { refreshList(getNotifications()) }
+        //MyApplication.executor.execute { refreshList(getNotifications()) }
 
         onBackPressedDispatcher.addCallback(this) {
             if (::adapter.isInitialized && adapter.isSelectionMode) {

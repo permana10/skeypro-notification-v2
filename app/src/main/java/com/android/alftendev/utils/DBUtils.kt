@@ -93,24 +93,26 @@ object DBUtils {
     }
 
     fun notificationWithoutChat(): List<Notifications> {
-        return notifications
-            .query()
-            .orderDesc(Notifications_.time)
-            .build()
-            .findLazy()
-            .filter { !it.packageName.target.isChat }
+        val builder = notifications.query().orderDesc(Notifications_.time)
+
+        builder.link(Notifications_.packageName)
+            .equal(PackageName_.isChat, false)
+
+        return builder.build().findLazy()
     }
 
-    fun notificationWithoutChatSearch(string: String): List<Notifications> {
-        return notifications
+    fun notificationWithoutChatWithSearch(string: String): List<Notifications> {
+        val builder = notifications
             .query()
             .contains(Notifications_.title, string, QueryBuilder.StringOrder.CASE_INSENSITIVE)
             .or()
             .contains(Notifications_.text, string, QueryBuilder.StringOrder.CASE_INSENSITIVE)
             .orderDesc(Notifications_.time)
-            .build()
-            .find()
-            .filter { !it.packageName.target.isChat }
+
+        builder.link(Notifications_.packageName)
+            .equal(PackageName_.isChat, false)
+
+        return builder.build().findLazy()
     }
 
     fun isChatNotificationSearch(string: String): List<Notifications> {
