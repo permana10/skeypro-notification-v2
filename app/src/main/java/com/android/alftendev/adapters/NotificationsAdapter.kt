@@ -24,8 +24,9 @@ import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textview.MaterialTextView
 
+@SuppressLint("NotifyDataSetChanged")
 class NotificationsAdapter(
-    private val notifications: List<Notifications>,
+    private var notifications: List<Notifications>,
     private val context: Context,
     private val selectionListener: OnSelectionChangeListener
 ) : RecyclerView.Adapter<NotificationsAdapter.ViewHolder>() {
@@ -135,6 +136,11 @@ class NotificationsAdapter(
         selectedItemsIds.clear()
         selectionListener.onSelectionModeChange(false)
         selectionListener.onSelectionCountChange(0)
+        notifyDataSetChanged()
+    }
+
+    fun updateData(newList: List<Notifications>) {
+        this.notifications = newList
         notifyDataSetChanged()
     }
 

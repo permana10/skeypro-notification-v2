@@ -64,9 +64,15 @@ abstract class NotificationListViewerBaseActivity : AppCompatActivity(),
 
     open fun refreshList(notifications: List<Notifications>) {
         runOnUiThread {
-            adapter = NotificationsAdapter(notifications, this, this)
-            recycleView.layoutManager = linearLayoutManager
-            recycleView.adapter = adapter
+            //adapter = NotificationsAdapter(notifications, this, this)
+            //recycleView.adapter = adapter
+
+            if (!::adapter.isInitialized) {
+                adapter = NotificationsAdapter(notifications, this@NotificationListViewerBaseActivity, this@NotificationListViewerBaseActivity)
+                recycleView.adapter = adapter
+            } else {
+                adapter.updateData(notifications)
+            }
 
             onSelectionModeChange(false)
         }
@@ -98,6 +104,7 @@ abstract class NotificationListViewerBaseActivity : AppCompatActivity(),
         etSearch = findViewById(R.id.etSearch)
         recycleView = findViewById(R.id.lvAll)
         linearLayoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        recycleView.layoutManager = linearLayoutManager
 
         llSelectionBar = findViewById(R.id.llSelectionBar)
         cbSelectAll = findViewById(R.id.cbSelectAll)
