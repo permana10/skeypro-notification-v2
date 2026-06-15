@@ -33,31 +33,24 @@ android {
     }
 ///////
     signingConfigs {
-        release {
-            def keystorePath = System.getenv("SIGNING_STORE_FILE") ?: "notificationlistener.jks"
-            def keystoreFile = file(keystorePath)
-
-            if (keystoreFile.exists()) {
-                storeFile = keystoreFile
-                storePassword = System.getenv("SIGNING_STORE_PASSWORD")
-                keyAlias = System.getenv("SIGNING_KEY_ALIAS")
-                keyPassword = System.getenv("SIGNING_KEY_PASSWORD")
-            }
-        }
+    release {
+        storeFile file("skeybox.jks")
+        storePassword "skeypro123"
+        keyAlias "skeybox"
+        keyPassword "skeypro123"
     }
+}
 
-    buildTypes {
-        release {
-            if (signingConfigs.release.storeFile != null) {
-                signingConfig signingConfigs.release
-            }
+buildTypes {
+    release {
+        signingConfig signingConfigs.release
 
-            minifyEnabled true
-            shrinkResources true
-            crunchPngs true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
+        minifyEnabled true
+        shrinkResources true
+        crunchPngs true
+        proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
     }
+}
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
