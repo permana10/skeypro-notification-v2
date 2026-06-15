@@ -45,17 +45,18 @@ jobs:
           SIGNING_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           SIGNING_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
 
-      - name: Rename APK
+      - name: Find and Rename APK
         run: |
-          mv app/build/outputs/apk/release/app-release.apk notification-listener-${{ env.VERSION_NUMBER }}.apk
+          find app/build/outputs -name "*.apk"
+          APK_FILE=$(find app/build/outputs -name "*.apk" | head -n 1)
+          cp "$APK_FILE" notification-listener-${{ env.VERSION_NUMBER }}.apk
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          name: ${{ env.VERSION_NUMBER }}
           tag_name: ${{ github.ref_name }}
-          body: "Release ${{ env.VERSION_NUMBER }}"
-          files: |
-            notification-listener-${{ env.VERSION_NUMBER }}.apk
+          name: ${{ env.VERSION_NUMBER }}
+          body: Release ${{ env.VERSION_NUMBER }}
+          files: notification-listener-${{ env.VERSION_NUMBER }}.apk
           draft: false
           prerelease: false
